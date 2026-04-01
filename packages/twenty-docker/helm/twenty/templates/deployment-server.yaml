@@ -158,6 +158,10 @@ spec:
             {{- if $storageEnv }}
             {{- $storageEnv | nindent 12 }}
             {{- end }}
+            {{- $serverEnv := include "twenty.renderEnvMap" (dict "env" .Values.server.env "skip" (list "ACCESS_TOKEN_EXPIRES_IN" "APP_SECRET" "DB_PASSWORD" "LOGIN_TOKEN_EXPIRES_IN" "PG_DATABASE_URL" "REDIS_PASSWORD" "REDIS_URL" "SERVER_URL" "SIGN_IN_PREFILLED" "STORAGE_TYPE")) }}
+            {{- if $serverEnv }}
+            {{- $serverEnv | nindent 12 }}
+            {{- end }}
             {{- with .Values.server.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

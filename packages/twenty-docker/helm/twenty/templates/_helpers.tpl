@@ -211,3 +211,15 @@ local
 {{- end }}
 {{- end -}}
 {{- end -}}
+
+{{/* Render arbitrary env vars from a values map, excluding chart-managed keys */}}
+{{- define "twenty.renderEnvMap" -}}
+{{- $env := .env | default dict -}}
+{{- $skip := .skip | default list -}}
+{{- range $name, $value := $env }}
+{{- if not (has $name $skip) }}
+- name: {{ $name }}
+  value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end -}}

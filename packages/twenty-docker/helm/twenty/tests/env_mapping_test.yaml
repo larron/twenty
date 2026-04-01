@@ -56,3 +56,49 @@ tests:
               secretKeyRef:
                 name: my-secret
                 key: custom
+
+  - it: renders additional server env values from server.env
+    template: templates/deployment-server.yaml
+    set:
+      server.env.FRONTEND_URL: https://crm.example.com
+      server.env.IS_MULTIWORKSPACE_ENABLED: "true"
+      server.env.DEFAULT_SUBDOMAIN: app
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FRONTEND_URL
+            value: "https://crm.example.com"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: IS_MULTIWORKSPACE_ENABLED
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DEFAULT_SUBDOMAIN
+            value: "app"
+
+  - it: renders additional worker env values from worker.env
+    template: templates/deployment-worker.yaml
+    set:
+      worker.env.FRONTEND_URL: https://crm.example.com
+      worker.env.IS_MULTIWORKSPACE_ENABLED: "true"
+      worker.env.DEFAULT_SUBDOMAIN: app
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: FRONTEND_URL
+            value: "https://crm.example.com"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: IS_MULTIWORKSPACE_ENABLED
+            value: "true"
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: DEFAULT_SUBDOMAIN
+            value: "app"

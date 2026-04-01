@@ -86,6 +86,10 @@ spec:
                 secretKeyRef:
                   name: {{ include "twenty.secret.tokens.name" . }}
                   key: accessToken
+            {{- $workerEnv := include "twenty.renderEnvMap" (dict "env" .Values.worker.env "skip" (list "APP_SECRET" "DB_PASSWORD" "PG_DATABASE_URL" "REDIS_PASSWORD" "REDIS_URL" "SERVER_URL" "STORAGE_TYPE")) }}
+            {{- if $workerEnv }}
+            {{- $workerEnv | nindent 12 }}
+            {{- end }}
             {{- with .Values.worker.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
